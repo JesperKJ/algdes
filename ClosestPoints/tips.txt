@@ -1,0 +1,3 @@
+redular expression to find names and or digits
+
+[a-z:A-Z]+ \d+ \d+
