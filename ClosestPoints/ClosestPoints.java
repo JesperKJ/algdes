@@ -66,14 +66,14 @@ public class ClosestPoints {
 		int shortb = 1;
 		double shortd = distance(px.get(0),px.get(1));
 		for (int i = 0; i < px.size() - 1; i++) {
-		//	for (int j = 0; j < Distance.length; j++)
-			//shortd = distance(points.get(i),points.get(i+1));
-			if (distance(px.get(i),px.get(i+1)) < shortd) {
-				shortd = distance(px.get(i),px.get(i+1));
+		for (int j = i + 1; j < px.size(); j++) {
+			if (distance(px.get(i),px.get(j)) < shortd) {
+				shortd = distance(px.get(i),px.get(j));
 				shorta = i;
-				shortb = i+1;
+				shortb = j;
 			}
     	}
+		}
 		System.out.println(px.get(shorta).name + " + " + shortd + " + " + px.get(shortb).name);
 	}
 	
@@ -82,19 +82,19 @@ public class ClosestPoints {
 		int shortb = 1;
 		double shortd = distance(px.get(0),px.get(1));
 		for (int i = 0; i < px.size() - 1; i++) {
-		//	for (int j = 0; j < Distance.length; j++)
-			//shortd = distance(points.get(i),points.get(i+1));
-			if (distance(px.get(i),px.get(i+1)) < shortd) {
-				shortd = distance(px.get(i),px.get(i+1));
+			for (int j = i + 1; j < px.size(); j++) {
+			if (distance(px.get(i),px.get(j)) < shortd) {
+				shortd = distance(px.get(i),px.get(j));
 				shorta = i;
 				shortb = i+1;
 				//ArrayList<Point> shortPoint = px.get(i); 
 			}
     	}
+		}
 		return shortd; //shortPoint;
 	}
 	
-	public static ArrayList shortestPointFifteen(ArrayList<Point> px, int b){
+	public static ArrayList<Point> shortestPointFifteen(ArrayList<Point> px, int b){
 		double shortd = distance(px.get(0),px.get(1));
 		ArrayList<Point> shortPoint = new ArrayList<>();
 		shortPoint.add(px.get(0));
@@ -131,15 +131,15 @@ public class ClosestPoints {
 		}
 
 // Sortering:
-ArrayList pointsx = (ArrayList) points.clone();
-ArrayList pointsy = (ArrayList) points.clone();
+ArrayList<Point> pointsx = (ArrayList<Point>) points.clone();
+ArrayList<Point> pointsy = (ArrayList<Point>) points.clone();
 
 
 Collections.sort(pointsy , Point.ycomparator);
 Collections.sort(pointsx , Point.xcomparator);
 //Point.printPoints(pointsy);
 //Point.printPoints(pointsx);
-shortest(points);
+//shortest(points);
 
 if (pointsx.size() <= 3) {
 	Point.printPoints(shortestPointFifteen(points,points.size()));
@@ -155,9 +155,9 @@ else {
 	
 	
 	ArrayList<Point> listS = new ArrayList<Point>();
-	for (int i = 0; i < points.size();i++) {
-		if (points.get(i).x >= xstar - d & points.get(i).x <= xstar + d )
-			listS.add(points.get(i));
+	for (int i = 0; i < pointsy.size();i++) {
+		if (pointsy.get(i).x >= xstar - d & pointsy.get(i).x <= xstar + d )
+			listS.add(pointsy.get(i));
 	}
 	//Point.printPoints(listS);
 	Point.printPoints(shortestPointFifteen(listS,15));
