@@ -17,22 +17,7 @@ class Point {
 	public static void printPoints(ArrayList<Point> p){
 		for (int i = 0; i < p.size(); i++)
 			System.out.println(p.get(i).name +  ": (x" + i + " , y" + i + ") = (" + p.get(i).x + " , " + p.get(i).y + ")");
-		//for(Point str: points){
-		//	System.out.println(str.x + " - " + str.y);
-		//}
 	}
-	
-	//implements Cloneable {
-		//String name;
-		//double x;
-		//double y;
-	
-	//public Point clone() throws CloneNotSupportedException {
-		//return (Point) super.clone();
-//		Point clonedObj = (Point) super.clone();
-		//return clonedObj;
-	//}
-	//};
 	
 	public static Comparator<Point> xcomparator= new Comparator<Point>() {
 		public int compare (Point s1, Point s2) {
@@ -115,18 +100,55 @@ public class ClosestPoints {
 		return shortPoint; //shortPoint;
 	}
 	
+	
+	public static ArrayList<Point> closestPairRec(ArrayList<Point> Px,ArrayList<Point> Py) {
+
+		if (Px.size() <= 3) {
+			return shortestPointFifteen(Px,Px.size());
+		}
+		else {
+			ArrayList<Point> Qx = new ArrayList<Point>(Px.subList(0, (Px.size()/2)));
+			ArrayList<Point> Rx = new ArrayList<Point>(Px.subList((Px.size()/2),Px.size()));
+			ArrayList<Point> Qy = new ArrayList<Point>(Px.subList(0, (Px.size()/2)));
+			ArrayList<Point> Ry = new ArrayList<Point>(Px.subList((Px.size()/2),Px.size()));
+			
+			Collections.sort(Qy , Point.ycomparator);
+			Collections.sort(Ry , Point.ycomparator);
+			
+			double d = Math.min(shortestPoint(closestPairRec(Qx,Qy)),
+					shortestPoint(closestPairRec(Rx,Ry)));
+			double xstar = Qx.get(Qx.size()-1).x;
+						
+			ArrayList<Point> S = new ArrayList<Point>();
+			for (int i = 0; i < Py.size();i++) {
+				if (Py.get(i).x >= xstar - d & Py.get(i).x <= xstar + d )
+					S.add(Py.get(i));
+			}
+			//Point.printPoints(listS);
+			return (shortestPointFifteen(S,15));
+		}
+		}
+	
+	
 	public static void main(String[] args) {
 		long startTime = System.nanoTime();
 		ArrayList<Point> points = new ArrayList<>();
 		// reading data from file
 		Scanner scan = new Scanner(System.in);
+		int i = 0;
+		int s = 99;
 		while (scan.hasNext()) {
-			int i = 0;
-			//Pattern pattern = Pattern.compile("n=\\d*");
-			final String lineFromFile  = scan.nextLine();
+			final String lineFromFile  = scan.nextLine().trim();
+			if (lineFromFile.equalsIgnoreCase("NODE_COORD_SECTION"))
+			{s = i;
+			System.out.println(s);
+			}
+			System.out.println(lineFromFile.split("\\s+")[1]);
+			if (i > s + 2) {
 			points.add(new Point(lineFromFile.split("\\s+")[0],
 					Double.parseDouble(lineFromFile.split("\\s+")[1]),
 					Double.parseDouble(lineFromFile.split("\\s+")[2])));
+			}
 			i++;
 		}
 
@@ -137,36 +159,11 @@ ArrayList<Point> pointsy = (ArrayList<Point>) points.clone();
 
 Collections.sort(pointsy , Point.ycomparator);
 Collections.sort(pointsx , Point.xcomparator);
-//Point.printPoints(pointsy);
-//Point.printPoints(pointsx);
-//shortest(points);
 
-if (pointsx.size() <= 3) {
-	Point.printPoints(shortestPointFifteen(points,points.size()));
-}
-else {
-//while (pointsx.size() <= 3) {
-	ArrayList<Point> listQx = new ArrayList<Point>(pointsx.subList(0, (pointsx.size()/2)));
-	ArrayList<Point> listRx = new ArrayList<Point>(pointsx.subList((pointsx.size()/2),pointsx.size()));
-	ArrayList<Point> listQy = new ArrayList<Point>(pointsy.subList(0, pointsy.size()/2));
-	ArrayList<Point> listRy = new ArrayList<Point>(pointsy.subList((pointsy.size()/2),pointsy.size()));
-	double d = Math.min(shortestPoint(listQx),shortestPoint(listRx));
-	double xstar = listQx.get(listQx.size()-1).x;
-	
-	
-	ArrayList<Point> listS = new ArrayList<Point>();
-	for (int i = 0; i < pointsy.size();i++) {
-		if (pointsy.get(i).x >= xstar - d & pointsy.get(i).x <= xstar + d )
-			listS.add(pointsy.get(i));
-	}
-	//Point.printPoints(listS);
-	Point.printPoints(shortestPointFifteen(listS,15));
-	
-//}	
-}
+Point.printPoints(closestPairRec(pointsx,pointsy)); 
 
 long stopTime = System.nanoTime();
-//System.out.println(stopTime - startTime);
+System.out.println(stopTime - startTime);
 	}
 }
 
