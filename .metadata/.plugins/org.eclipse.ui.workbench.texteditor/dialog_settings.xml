@@ -2,12 +2,16 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="shortest" key="selection"/>
+		<item value="shortestPointFifteen" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
-		<item value="false" key="wholeword"/>
+		<item value="true" key="wholeword"/>
 		<list key="findhistory">
+			<item value="shortestPointFifteen"/>
+			<item value="/"/>
+			<item value="distance"/>
+			<item value="shortestPoint"/>
 			<item value="shortest"/>
 			<item value="print"/>
 			<item value="womanRanking"/>
@@ -20,7 +24,7 @@
 		<item value="344" key="DIALOG_WIDTH"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 		<item value="440" key="DIALOG_HEIGHT"/>
-		<item value="437" key="DIALOG_X_ORIGIN"/>
-		<item value="94" key="DIALOG_Y_ORIGIN"/>
+		<item value="304" key="DIALOG_X_ORIGIN"/>
+		<item value="332" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>
