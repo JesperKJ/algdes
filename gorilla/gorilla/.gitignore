@@ -2,3 +2,7 @@
 /SequenceAlignment$scoring.class
 /SequenceAlignment.class
 /gorilla$scoring.class
+/SequenceAlignment$penalties.class
+/SequenceAlignment$species.class
+/gorilla$penalties.class
+/gorilla$species.class

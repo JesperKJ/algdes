@@ -11,7 +11,7 @@ public class SequenceAlignment {
 	//}
 	
 	static class penalties {
-		public String name[];
+		public String name;
 		public int[][] matrix;
 	}
 	
@@ -21,7 +21,7 @@ public class SequenceAlignment {
 	}
 	
 	private static penalties dataReader(String filepath) throws IOException { 
-		String[] name = new String[24];
+		String name = "A";
 		int[][] matrix = new int[24][24];
 		try {
 			Scanner scan = null;
@@ -42,8 +42,7 @@ public class SequenceAlignment {
 				str =  scan.findInLine(pattern);
 				str2 = scan.findInLine(pattern2);
 				if (str != null)
-					for (int i = 0; i < str.split("\\s+").length-1; i++)
-					name[i] = str.split("\\s+")[i+1];
+					name = str.replaceAll("\\s+", "");
 				if (str2 != null) {
 					for (int i = 0; i < str2.split("[\\r\\n]+")[0].split("\\s+").length-1; i++) {
 					matrix[j][i] = Integer.parseInt(str2.split("[\\r\\n]+")[0].split("\\s+")[i+1]); 
@@ -66,7 +65,7 @@ public class SequenceAlignment {
 	//Define recurrence
 	//Algorithm: Two strings as input, double as output
 	
-		private static int opt(String X, String Y, String[] name, int[][] matrix, int I, int J ) {
+		private static int opt(String X, String Y, String name, int[][] matrix, int I, int J ) {
 			int opt;
 			int alpha;
 			int delta;
@@ -84,14 +83,14 @@ public class SequenceAlignment {
 			return opt;
 		}
 		
-		private static int AbuttomUp(String X, String Y, String[] name, int[][] matrix) {
+		private static int AbuttomUp(String X, String Y, String name, int[][] matrix) {
 			int lengthx = X.length();
 			int lengthy = Y.length();
 			
 			int[][] A = new int[lengthx + 1][lengthy + 1];
 			int d = -4;
 			int opt;
-			int alpha;
+			int alpha = 0;
 			
 			for (int i = 0; i <= lengthx; i++) {
 				A[i][0] = i*d;
@@ -99,14 +98,17 @@ public class SequenceAlignment {
 			for (int i = 0; i <= lengthy; i++) {
 				A[0][i] = i*d;
 			}
-			
+			System.out.println( lengthx);
+			System.out.println( lengthy);
+			System.out.println( X);
+			System.out.println( Y);
 			for (int i = 1; i <= lengthx; i++) {
 				for (int j = 1; j <= lengthy; j++){
-			alpha = matrix[name.indexOf(X.charAt(i))][name.indexOf(X.charAt(j))];
+			alpha = matrix[name.indexOf(X.charAt(i-1))][name.indexOf(Y.charAt(j-1))];
 			A[i][j] = Math.max(alpha + A[i-1][j-1], Math.max(d + A[i][j-1], d + A[i-1][j]));
 				}
 			}
-			return A[lengthx + 1][lengthy + 1];
+			return A[lengthx][lengthy];
 		}
 	
 	//Algorithm: Two strings as input, double as output
@@ -137,7 +139,7 @@ public class SequenceAlignment {
 			scan = new Scanner(file);
 			while (scan.hasNextLine()) {
 				final String line = scan.nextLine().trim();
-				if (line.contains("<"))
+				if (line.contains(">"))
 					names.add(line);
 				else
 					gene.add(line);
@@ -171,6 +173,8 @@ public class SequenceAlignment {
 				int I = 2;
 				int J = 2;
 				System.out.println(opt(gene.get(0), gene.get(1), inputData.name, inputData.matrix, I, J));
+				System.out.println(AbuttomUp(gene.get(0),gene.get(1), inputData.name, inputData.matrix));
+				//System.out.println(inputData.name);
 	}	
 	
 	}

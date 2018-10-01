@@ -2,12 +2,16 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="shortestPointFifteen" key="selection"/>
+		<item value="names" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="true" key="wholeword"/>
 		<list key="findhistory">
+			<item value="names"/>
+			<item value="matrix"/>
+			<item value="costData"/>
+			<item value="scoring"/>
 			<item value="shortestPointFifteen"/>
 			<item value="/"/>
 			<item value="distance"/>
@@ -18,13 +22,14 @@
 			<item value="printMatrix"/>
 		</list>
 		<list key="replacehistory">
+			<item value="penalties"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="344" key="DIALOG_WIDTH"/>
 		<item value="1|Ubuntu|11.0|0|GTK|1|" key="DIALOG_FONT_NAME"/>
 		<item value="440" key="DIALOG_HEIGHT"/>
-		<item value="304" key="DIALOG_X_ORIGIN"/>
-		<item value="332" key="DIALOG_Y_ORIGIN"/>
+		<item value="619" key="DIALOG_X_ORIGIN"/>
+		<item value="153" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>
