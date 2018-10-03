@@ -16,8 +16,14 @@ public class SequenceAlignment {
 	}
 	
 	static class species {
-		public String name;
-		public String protein;
+		String name;
+		String protein;
+		int penalty;
+		public species(String name, String protein, int penalty){
+			this.name = name;
+			this.protein = protein;
+			this.penalty = penalty;
+		}
 	}
 	
 	private static penalties dataReader(String filepath) throws IOException { 
@@ -82,12 +88,18 @@ public class SequenceAlignment {
 			}
 			return opt;
 		}
-		
-		private static int AbuttomUp(String X, String Y, String name, int[][] matrix) {
+			
+		private static ArrayList<species> AbuttomUp(String X, String Y, String name, int[][] matrix) {
+			ArrayList<species> matchSpecies = new ArrayList<>();
 			int lengthx = X.length();
 			int lengthy = Y.length();
+			int d1, d2, d3;
+			//StringBuilder Xout = new StringBuilder("Hej");
+			char[] Xout = new char[Math.max(lengthx, lengthy)];
+			char[] Yout = new char[Math.max(lengthx, lengthy)];
 			
 			int[][] A = new int[lengthx + 1][lengthy + 1];
+			int[][] Aux = new int[lengthx][lengthy];
 			int d = -4;
 			int opt;
 			int alpha = 0;
@@ -98,17 +110,72 @@ public class SequenceAlignment {
 			for (int i = 0; i <= lengthy; i++) {
 				A[0][i] = i*d;
 			}
-			System.out.println( lengthx);
-			System.out.println( lengthy);
-			System.out.println( X);
-			System.out.println( Y);
+			System.out.println(X);
+			System.out.println(Y);
+			System.out.println(lengthx);
+			System.out.println(lengthy);
 			for (int i = 1; i <= lengthx; i++) {
 				for (int j = 1; j <= lengthy; j++){
 			alpha = matrix[name.indexOf(X.charAt(i-1))][name.indexOf(Y.charAt(j-1))];
-			A[i][j] = Math.max(alpha + A[i-1][j-1], Math.max(d + A[i][j-1], d + A[i-1][j]));
+			d1 = alpha + A[i-1][j-1];			
+			d2 = d + A[i-1][j];
+			d3 = d + A[i][j-1];
+			A[i][j] = Math.max(d1, Math.max(d2, d3));
+			
+			if (d1 >= d2 & d1 >= d3)
+			Aux[i-1][j-1] = 1;
+			else if (d2 >= d3)
+				Aux[i-1][j-1] = 2;
+			else
+				Aux[i-1][j-1] = 3;
 				}
 			}
-			return A[lengthx][lengthy];
+		
+			for (int i = 0 ; i < lengthx +1 ; i++) {
+				for (int j = 0; j < lengthy +1; j++)
+				System.out.print(A[i][j] + " ");
+				System.out.println();
+			}
+			
+			
+			for (int i = 0 ; i < lengthx ; i++) {
+				for (int j = 0; j < lengthy; j++)
+				System.out.print(Aux[i][j] + " ");
+				System.out.println();
+			}
+			
+			int lx = lengthx - 1;
+			int ly = lengthy - 1;
+			for (int i = Math.max(lengthx, lengthy)-1; i>=0;i--) { 
+			if (Aux[lx][ly] == 1) {
+			Xout[i] = X.charAt(lx);
+			Yout[i] = Y.charAt(ly);
+			if (lx > 0) 
+				lx--;
+			if (ly > 0)
+				ly--;
+			}
+			else if (Aux[lx][ly] == 2) {
+			Xout[i] = X.charAt(lx);
+			Yout[i] = '-';
+			if (lx > 0) 
+				lx--;
+			}
+			else if (Aux[lx][ly] == 3) {
+				Xout[i] = '-';
+				Yout[i] = Y.charAt(ly);
+			if (ly > 0)
+				ly--;
+			}
+			}
+			String XoutS = String.valueOf(Xout);
+			String YoutS = String.valueOf(Yout);
+			//System.out.println(Xout);
+			//System.out.println(Yout);
+			matchSpecies.add(new species("a",XoutS,A[lengthx][lengthy]));
+			matchSpecies.add(new species("a",YoutS,A[lengthx][lengthy]));
+			return matchSpecies;
+			
 		}
 	
 	//Algorithm: Two strings as input, double as output
@@ -147,7 +214,7 @@ public class SequenceAlignment {
 		} catch(FileNotFoundException e) {
 			e.printStackTrace();
 		}
-	    
+	    /*
 		for (int i = 0 ; i < names.size() ; i++) 
 			System.out.print(names.get(i) + " ");
 			System.out.println();	
@@ -155,7 +222,7 @@ public class SequenceAlignment {
 			for (int i = 0 ; i < gene.size() ; i++) 
 				System.out.print(gene.get(i) + " ");
 				System.out.println();	
-		
+		*/
 		/*
 		for (int i = 0 ; i < inputData.names.length ; i++) 
 			System.out.print(inputData.names[i] + " ");
@@ -172,8 +239,16 @@ public class SequenceAlignment {
 				
 				int I = 2;
 				int J = 2;
-				System.out.println(opt(gene.get(0), gene.get(1), inputData.name, inputData.matrix, I, J));
-				System.out.println(AbuttomUp(gene.get(0),gene.get(1), inputData.name, inputData.matrix));
+				ArrayList<species> matchSpecies = new ArrayList<>();
+				//System.out.println(opt(gene.get(0), gene.get(1), inputData.name, inputData.matrix, I, J));
+			for (int i = 0; i < gene.size(); i++){
+				for (int j = i + 1; j < gene.size(); j++) {
+					matchSpecies = AbuttomUp(gene.get(i),gene.get(j), inputData.name, inputData.matrix);
+				System.out.println(names.get(i) + "--" + names.get(j) + ": " + matchSpecies.get(1).penalty);
+				System.out.println(matchSpecies.get(0).protein);
+				System.out.println(matchSpecies.get(1).protein);
+				}
+			}
 				//System.out.println(inputData.name);
 	}	
 	
